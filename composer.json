@@ -1,0 +1,13 @@
+{
+    "name": "aries/seppay",
+    "description": "Payment Package with Saman Electronic Payment (pay.ir) over iran Shaparak Network for Laravel",
+    "license": "gnu/gpl",
+    "authors": [
+        {
+            "name": "Mohammad Mohammadi",
+            "email": "imohammadd@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
