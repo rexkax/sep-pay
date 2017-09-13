@@ -13,7 +13,9 @@ class SeppayServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        $this->publishes([
+            __DIR__.'/config/seppay.php'    =>  config_path('seppay.php')
+        ]);
     }
 
     /**
@@ -23,6 +25,8 @@ class SeppayServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->mergeConfigFrom(
+            __DIR__.'/config/seppay.php', 'seppay'
+        );
     }
 }
