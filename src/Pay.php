@@ -6,6 +6,7 @@ use GuzzleHttp\Client;
 class Pay {
     private $client;
     private $result;
+    private $transId;
 
     private $amount;
     private $callback;
@@ -14,7 +15,8 @@ class Pay {
     public function __construct()
     {
         $this->client = new Client([
-            'verify'    =>  false
+            'verify'    =>  false,
+            'timeout'   =>  5
         ]);
 
         $this->factorNumber = null;
@@ -34,14 +36,38 @@ class Pay {
             'form_params'  =>  $params
         ]);
 
-        $this->result = json_decode($res->getBody());
-        return $this->result;
+        $resp = json_decode($res->getBody());
+
+        $this->transId = $resp->transId;
+
+        return $resp;
     }
 
     public function start()
     {
-        return "https://pay.ir/payment/gateway/". $this->result->transId;
-        #return redirect("https://pay.ir/payment/gateway/". $this->result->transId);
+        return redirect()->to("https://pay.ir/payment/gateway/". $this->transId);
+    }
+
+    public function verify()
+    {
+        if(request()->input('status') == 1) {
+            $res = $this->client->post('https://pay.ir/payment/verify', [
+                'form_params'   =>  [
+                    'api'       =>  config('seppay.api'),
+                    'transId'   =>  request()->input('transId')
+                ]
+            ]);
+
+            $res = json_decode($res->getBody());
+
+            if($res->status == 1) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     public function amount($amount)
