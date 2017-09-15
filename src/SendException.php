@@ -1,15 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: mohammad
- * Date: 9/15/17
- * Time: 12:42 PM
- */
 
-namespace aries\seppay;
+namespace Aries\Seppay;
 
-use aries\seppay\BankException;
-use Throwable;
+use Aries\Seppay\BankException;
 
 class SendException extends BankException
 {

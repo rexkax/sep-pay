@@ -1,8 +1,8 @@
 <?php
 
-namespace aries\seppay;
+namespace Aries\Seppay;
 
-use aries\seppay\BankException;
+use Aries\Seppay\BankException;
 
 class VerifyException extends BankException
 {

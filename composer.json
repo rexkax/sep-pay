@@ -1,6 +1,7 @@
 {
     "name": "aries/seppay",
-    "description": "Payment Package with Saman Electronic Payment (pay.ir) over iran Shaparak Network for Laravel",
+    "description": "A Laravel package for using to pay.ir payment gateways",
+    "keywords": ["laravel", "payment", "pay", "gateway", "payment-gateway", "saman", "saman-electronic-pardaz", "sep", "pay.ir", "aries"],
     "license": "MIT",
     "authors": [
         {
@@ -9,5 +10,10 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Aries\\Seppay\\": "src"
+        }
+    }
 }

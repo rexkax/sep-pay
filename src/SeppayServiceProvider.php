@@ -1,6 +1,6 @@
 <?php
 
-namespace aries\seppay;
+namespace Aries\Seppay;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -14,7 +14,7 @@ class SeppayServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/seppay.php'    =>  config_path('seppay.php')
+            __DIR__.'/config/seppay.php'    =>  config_path('Seppay.php')
         ]);
     }
 
@@ -26,7 +26,7 @@ class SeppayServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            __DIR__.'/config/seppay.php', 'seppay'
+            __DIR__.'/config/seppay.php', 'Seppay'
         );
     }
 }

@@ -1,7 +1,7 @@
-##Sep Pay
+#Sep Pay
 *Payment Package with Saman Electronic Payment (pay.ir) over iran Shaparak Network for Laravel*
 
-***installing:***
+***Installing:***
 -------------
 run this command:
 

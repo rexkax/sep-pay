@@ -1,9 +1,7 @@
 <?php
-namespace aries\seppay;
+namespace Aries\Seppay;
 
 class Pay {
-    private $client;
-    private $result;
     private $transId;
 
     private $amount;
@@ -18,7 +16,7 @@ class Pay {
     public function ready()
     {
         $params = [];
-        $params['api']  =  config('seppay.api');
+        $params['api']  =  config('Seppay.api');
         $params['amount']   =   $this->amount;
         $params['factorNumber'] =   $this->factorNumber;
         $params['redirect'] =   $this->callback;
@@ -49,7 +47,7 @@ class Pay {
 
     public function verify()
     {
-        $api = config('seppay.api');
+        $api = config('Seppay.api');
         $transId = $_REQUEST['transId'];
 
         $ch = curl_init();
