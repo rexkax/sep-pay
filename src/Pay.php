@@ -1,8 +1,6 @@
 <?php
 namespace aries\seppay;
 
-use GuzzleHttp\Client;
-
 class Pay {
     private $client;
     private $result;
