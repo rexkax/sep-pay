@@ -14,11 +14,6 @@ class Pay {
 
     public function __construct()
     {
-        $this->client = new Client([
-            'verify'    =>  false,
-            'timeout'   =>  5
-        ]);
-
         $this->factorNumber = null;
     }
 
@@ -27,20 +22,26 @@ class Pay {
         $params = [];
         $params['api']  =  config('seppay.api');
         $params['amount']   =   $this->amount;
-        if ($this->factorNumber != null)
-            $params['factorNumber'] =   $this->factorNumber;
+        $params['factorNumber'] =   $this->factorNumber;
         $params['redirect'] =   $this->callback;
 
-        #$res = $this->client->request('POST', 'https://pay.ir/payment/send?api=test&amount=1000&redirect='.url('/'));
-        $res = $this->client->post('https://pay.ir/payment/send', [
-            'form_params'  =>  $params
-        ]);
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://pay.ir/payment/send");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "api={$params['api']}&amount={$params['amount']}&redirect={$params['redirect']}&factorNumber={$params['factorNumber']}");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        $res = curl_exec($ch);
+        curl_close($ch);
 
-        $resp = json_decode($res->getBody());
+        $res = json_decode($res);
 
-        $this->transId = $resp->transId;
+        if($res->status == 1) {
+            $this->transId = $res->transId;
+        } else {
+            throw new SendException($res->errorCode);
+        }
 
-        return $resp;
+        return $res;
     }
 
     public function start()
@@ -50,24 +51,24 @@ class Pay {
 
     public function verify()
     {
-        if(request()->input('status') == 1) {
-            $res = $this->client->post('https://pay.ir/payment/verify', [
-                'form_params'   =>  [
-                    'api'       =>  config('seppay.api'),
-                    'transId'   =>  request()->input('transId')
-                ]
-            ]);
+        $api = config('seppay.api');
+        $transId = $_REQUEST['transId'];
 
-            $res = json_decode($res->getBody());
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "https://pay.ir/payment/verify");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, "api={$api}&transId={$transId}");
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+        $res = curl_exec($ch);
+        curl_close($ch);
 
-            if($res->status == 1) {
-                return true;
-            } else {
-                return false;
-            }
+        $res = json_decode($res);
+
+        if($res->status != 1) {
+            throw new VerifyException($res->errorCode);
         }
 
-        return false;
+        return $res;
     }
 
     public function amount($amount)
