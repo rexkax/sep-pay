@@ -12,7 +12,7 @@ add this line to `config/app.php`:
 ```php
 'provider'  =>  [
     ...
-    aries/seppay/SeppayServiceProvider::class,
+    Aries/Seppay/SeppayServiceProvider::class,
 ]
 ```
 
@@ -23,12 +23,17 @@ and run this command:
 
 ***Usage:***
 ---------
+you can set pay.ir api key on `config/Seppay.php` or on your `.env` file with `SEP_API_KEY`
+
+
+***a basic example:***
+
 ```php
 <?php
 
 namespace App\Http\Controllers;
 
-use aries\seppay\Pay;
+use Aries\Seppay\Pay;
 use Illuminate\Http\Request;
 
 class TestController extends Controller
