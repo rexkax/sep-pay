@@ -2,11 +2,8 @@
 namespace Aries\Seppay;
 
 class Pay {
-    private $transId;
 
-    private $amount;
-    private $callback;
-    private $factorNumber;
+    use Data, Request;
 
     public function __construct()
     {
@@ -21,16 +18,10 @@ class Pay {
         $params['factorNumber'] =   $this->factorNumber;
         $params['redirect'] =   $this->callback;
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://pay.ir/payment/send");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "api={$params['api']}&amount={$params['amount']}&redirect={$params['redirect']}&factorNumber={$params['factorNumber']}");
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $res = curl_exec($ch);
-        curl_close($ch);
+        #dd($this->create_data($params));
 
-        $res = json_decode($res);
-
+        $res = $this->send_request("https://pay.ir/payment/send", $params, false);
+        #dd($res);
         if($res->status == 1) {
             $this->transId = $res->transId;
         } else {
@@ -47,38 +38,16 @@ class Pay {
 
     public function verify()
     {
-        $api = config('Seppay.api');
-        $transId = $_REQUEST['transId'];
+        $params['api'] = config('Seppay.api');
+        $params['transId'] = $_REQUEST['transId'];
 
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, "https://pay.ir/payment/verify");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "api={$api}&transId={$transId}");
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-        $res = curl_exec($ch);
-        curl_close($ch);
-
-        $res = json_decode($res);
+        #dd($this->create_data($params));
+        $res = $this->send_request("https://pay.ir/payment/verify", $params);
 
         if($res->status != 1) {
             throw new VerifyException($res->errorCode);
         }
 
         return $res;
-    }
-
-    public function amount($amount)
-    {
-        $this->amount = $amount;
-    }
-
-    public function callback($url)
-    {
-        $this->callback = urlencode($url);
-    }
-
-    public function factorNumber($number = null)
-    {
-        $this->factorNumber = $number;
     }
 }
