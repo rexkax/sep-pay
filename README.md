@@ -23,7 +23,7 @@ and run this command:
 
 ***Usage:***
 ---------
-you can set pay.ir api key on `config/Seppay.php` or on your `.env` file with `SEP_API_KEY`
+you can set [pay.ir](https://pay.ir) api key on `config/Seppay.php` or on your `.env` file with `SEP_API_KEY`
 
 
 ***a basic example:***
