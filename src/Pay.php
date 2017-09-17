@@ -18,10 +18,8 @@ class Pay {
         $params['factorNumber'] =   $this->factorNumber;
         $params['redirect'] =   $this->callback;
 
-        #dd($this->create_data($params));
-
         $res = $this->send_request("https://pay.ir/payment/send", $params, false);
-        #dd($res);
+
         if($res->status == 1) {
             $this->transId = $res->transId;
         } else {
@@ -41,7 +39,6 @@ class Pay {
         $params['api'] = config('Seppay.api');
         $params['transId'] = $_REQUEST['transId'];
 
-        #dd($this->create_data($params));
         $res = $this->send_request("https://pay.ir/payment/verify", $params);
 
         if($res->status != 1) {
