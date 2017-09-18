@@ -1,6 +1,9 @@
 <?php
 namespace Aries\Seppay;
 
+use Aries\Seppay\Traits\Data;
+use Aries\Seppay\Traits\Request;
+
 class Pay {
 
     use Data, Request;
@@ -39,11 +42,19 @@ class Pay {
         $params['api'] = config('Seppay.api');
         $params['transId'] = $_REQUEST['transId'];
 
+        $transaction = \DB::table('transactions')->where('transId', '=', $params['transId']);
+
         $res = $this->send_request("https://pay.ir/payment/verify", $params);
 
         if($res->status != 1) {
+            $transaction->update(['status' => 'FAILED']);
             throw new VerifyException($res->errorCode);
         }
+
+        $transaction->update([
+            'status' => 'SUCCESS',
+            'cardNumber' => $_REQUEST['cardNumber']
+        ]);
 
         return $res;
     }

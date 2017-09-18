@@ -1,5 +1,5 @@
 <?php
-namespace Aries\Seppay;
+namespace Aries\Seppay\Traits;
 
 trait Data {
     private $transId;

@@ -1,9 +1,9 @@
 <?php
 
-namespace Aries\Seppay;
+namespace Aries\Seppay\Traits;
 
 trait Request {
-    public function send_request($url, array $data, $toObject = false)
+    private function send_request($url, array $data, $toObject = false)
     {
         $fields = $this->create_data($data);
         $ch = curl_init();
@@ -17,7 +17,7 @@ trait Request {
         return json_decode($res, $toObject);
     }
 
-    protected function create_data(array $data)
+    private function create_data(array $data)
     {
         $length = count($data);
         $index = 0;

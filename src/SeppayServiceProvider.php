@@ -15,7 +15,11 @@ class SeppayServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/config/seppay.php'    =>  config_path('Seppay.php')
-        ]);
+        ], 'config');
+
+        $this->publishes([
+            __DIR__.'/migrations'   =>  base_path('database/migrations')
+        ], 'migrations');
     }
 
     /**
