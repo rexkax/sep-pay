@@ -12,7 +12,7 @@ add this line to `config/app.php`:
 ```php
 'provider'  =>  [
     ...
-    Aries/Seppay/SeppayServiceProvider::class,
+    Aries\Seppay\SeppayServiceProvider::class,
 ]
 ```
 
