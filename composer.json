@@ -15,5 +15,12 @@
         "psr-4": {
             "Aries\\Seppay\\": "src"
         }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aries\\Seppay\\SeppayServiceProvider"
+            ]
+        }
     }
 }

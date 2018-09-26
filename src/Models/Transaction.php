@@ -8,7 +8,9 @@ class Transaction extends Model {
     protected $fillable = [
         'amount',
         'transId',
-        'factorNumber'
+        'factorNumber',
+        'mobile',
+        'traceNumber'
     ];
 
     public function payable()

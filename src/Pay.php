@@ -15,11 +15,13 @@ class Pay {
 
     public function ready()
     {
-        $params = [];
-        $params['api']  =  config('Seppay.api');
-        $params['amount']   =   $this->amount;
+        $params                 =   [];
+        $params['api']          =   config('Seppay.api');
+        $params['amount']       =   $this->amount;
         $params['factorNumber'] =   $this->factorNumber;
-        $params['redirect'] =   $this->callback;
+        $params['redirect']     =   $this->callback;
+        $params['mobile']       =   $this->mobile;
+        $params['description']  =   $this->description;
 
         $res = $this->send_request("https://pay.ir/payment/send", $params, false);
 
@@ -39,21 +41,24 @@ class Pay {
 
     public function verify()
     {
-        $params['api'] = config('Seppay.api');
-        $params['transId'] = $_REQUEST['transId'];
+        $params['api']      = config('Seppay.api');
+        $params['transId']  = $_REQUEST['transId'];
 
-        $transaction = \DB::table('transactions')->where('transId', '=', $params['transId']);
+        $transaction    = \DB::table('transactions')->where('transId', '=', $params['transId']);
 
-        $res = $this->send_request("https://pay.ir/payment/verify", $params);
+        $res            = $this->send_request("https://pay.ir/payment/verify", $params);
 
         if($res->status != 1) {
-            $transaction->update(['status' => 'FAILED']);
+            $transaction->update([
+                'status' => 'FAILED'
+            ]);
             throw new VerifyException($res->errorCode);
         }
 
         $transaction->update([
-            'status' => 'SUCCESS',
-            'cardNumber' => $_REQUEST['cardNumber']
+            'status'        =>  'SUCCESS',
+            'cardNumber'    =>  $_REQUEST['cardNumber'],
+            'traceNumber'   =>  $_REQUEST['traceNumber']
         ]);
 
         return $res;

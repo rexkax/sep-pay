@@ -6,6 +6,8 @@ trait Data {
     private $amount;
     private $callback;
     private $factorNumber;
+    private $mobile;
+    private $description;
 
     public function amount($amount)
     {
@@ -20,5 +22,13 @@ trait Data {
     public function factorNumber($number = null)
     {
         $this->factorNumber = $number;
+    }
+
+    public function mobile($mobile = null) {
+        $this->mobile = $mobile;
+    }
+
+    public function description($description = null) {
+        $this->description = $description;
     }
 }

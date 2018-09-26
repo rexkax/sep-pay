@@ -1,5 +1,16 @@
-#Sep Pay
+***Sep Pay***
+------------
 *Payment Package with Saman Electronic Payment (pay.ir) over iran Shaparak Network for Laravel*
+
+
+***Update from 1:***
+---------
+You need to publish Service Provider again and run migration to update transaction table:
+```
+php artisan vendor:publish  --provider='Aries\Seppay\SeppayServiceProvider'
+
+php artisan migrate
+```
 
 ***Installing:***
 -------------
@@ -7,18 +18,15 @@ run this command:
 
 ``composer require aries/seppay``
 
-add this line to `config/app.php`:
-
-```php
-'provider'  =>  [
-    ...
-    Aries\Seppay\SeppayServiceProvider::class,
-]
-```
 
 and run this command:
 
-`php artisan vendor:publish`
+``php artisan vendor:publish  --provider='Aries\Seppay\SeppayServiceProvider'
+``
+
+then run:
+
+``php artisan migrate``
 
 
 ***Usage:***
@@ -44,7 +52,7 @@ and in your controller you can start a payment like this:
 ```php
 public function payment($id) {
     $bill = Bill::find($id);
-    return $bill->pay(10000, $callback_url, $factor_number);
+    return $bill->pay(10000, $mobile, $description, $callback_url, $factor_number);
 }
 ```
 
@@ -75,7 +83,8 @@ class TestController extends Controller
             Transaction::create([
                 'amount'        =>  $amount,
                 'transId'       =>  $response->transId,
-                'factorNumber'  =>  $factor_number
+                'factorNumber'  =>  $factor_number,
+                'mobile'        =>  $mobile
             ]);
             
             /*

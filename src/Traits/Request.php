@@ -23,7 +23,8 @@ trait Request {
         $index = 0;
         $string = "";
         foreach ($data as $key => $value) {
-            $string .= $key.'='.$value;
+            if($value != null)
+                $string .= $key.'='.$value;
             if($index<$length-1) {
                 $index++;
                 $string .='&';
