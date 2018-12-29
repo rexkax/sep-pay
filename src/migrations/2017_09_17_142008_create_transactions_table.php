@@ -22,7 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->string('payable_type')->nullable();
             /* TODO: COMPLETE THIS */
             $table->integer('amount');
-            $table->integer('transId')->unique();
+            $table->string('transId')->unique();
             $table->string('factorNumber')->nullable();
             $table->string('cardNumber')->nullable();
             $table->enum('status', ['INIT', 'SUCCESS', 'FAILED'])->default('INIT');
