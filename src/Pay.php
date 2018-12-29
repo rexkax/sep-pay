@@ -23,10 +23,10 @@ class Pay {
         $params['mobile']       =   $this->mobile;
         $params['description']  =   $this->description;
 
-        $res = $this->send_request("https://pay.ir/payment/send", $params, false);
+        $res = $this->send_request("https://pay.ir/pg/send", $params, false);
 
         if($res->status == 1) {
-            $this->transId = $res->transId;
+            $this->transId = $res->token;
         } else {
             throw new SendException($res->errorCode);
         }
@@ -36,31 +36,30 @@ class Pay {
 
     public function start()
     {
-        return redirect()->to("https://pay.ir/payment/gateway/". $this->transId);
+        return redirect()->to("https://pay.ir/pg/". $this->transId);
     }
 
     public function verify()
     {
         $params['api']      = config('Seppay.api');
-        $params['transId']  = $_REQUEST['transId'];
+        $params['token']  = $_REQUEST['token'];
 
-        $transaction    = \DB::table('transactions')->where('transId', '=', $params['transId']);
+        $transaction    = \DB::table('transactions')->where('transId', '=', $params['token']);
 
-        $res            = $this->send_request("https://pay.ir/payment/verify", $params);
+        $res            = $this->send_request("https://pay.ir/pg/verify", $params);
 
         if($res->status != 1) {
             $transaction->update([
                 'status' => 'FAILED'
             ]);
             throw new VerifyException($res->errorCode);
-        }
+        } else {
 
-        $transaction->update([
-            'status'        =>  'SUCCESS',
-            'cardNumber'    =>  $_REQUEST['cardNumber'],
-            'traceNumber'   =>  $_REQUEST['traceNumber']
-        ]);
+			$transaction->update([
+				'status'        =>  'SUCCESS'
+			]);
 
-        return $res;
+			return $res;
+		}
     }
 }
